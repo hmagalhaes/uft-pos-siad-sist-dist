@@ -1,0 +1,11 @@
+#!/bin/bash
+
+PROGRAM=busca_sequencial
+
+# mpirun -np 4 --hostfile host_file mestre_escravo
+
+clear
+rm ${PROGRAM}
+#mpicc -o ${PROGRAM} ${PROGRAM}.c
+mpic++ -o ${PROGRAM} ${PROGRAM}.cpp
+mpirun -np 4 --hostfile host_file ${PROGRAM}
