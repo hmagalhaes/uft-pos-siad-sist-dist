@@ -1,1 +1,3 @@
-localhost slots=4 
+# Configuração da quantidade de slots disponíveis a cada host.
+# Normalmente atrelado à quantidade de núcleos de processamento e/ou threads da CPU.
+localhost slots=10
