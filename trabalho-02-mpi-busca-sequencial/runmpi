@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROGRAM=${PROGRAM:-busca_sequencial_mpi}
-PROCESSOR_COUNT=${PROCESSOR_COUNT:-2}
+PROCESSOR_COUNT=${PROCESSOR_COUNT:-3}
 COMPILER=${COMPILER:-cpp}
 
 clear
