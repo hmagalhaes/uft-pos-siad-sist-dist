@@ -7,6 +7,7 @@
 #define RANK_MESTRE 0
 
 #define SINGLE_ELEMENT_LENGTH 1
+#define NOTHING_FOUND_INDEX -1
 
 #define TAG_LENGTH 1
 #define TAG_DATA 2
@@ -14,11 +15,14 @@
 #define TAG_SLAVE_WORK_COMPLETE 4
 #define TAG_STOP_SEARCH 5
 
-#define SLAVE_SEARCH_BATCH_SIZE 100
-#define TEST_ARRAY_LENGTH 200000000
-#define TEST_TARGET_VALUE  99999999
+#define SLAVE_SEARCH_BATCH_SIZE 1000
 
-#define NOTHING_FOUND_INDEX -1
+#define TEST_ARRAY_LENGTH 500000000
+#define TEST_TARGET_VALUE TEST_ARRAY_LENGTH - 1
+
+// O processo de liberação de memória ajuda com grandes payloads mas
+// exige tempo considerável de processamento que não vale a pena com payload razoável
+#define EARLY_MEMORY_FREE 0
 
 
 /**
@@ -158,9 +162,7 @@ class WorkData {
         }
 
         ~WorkData() {
-            if (this->numberList != NULL) {
-                delete this->numberList;
-            }
+            this->freeData();
         }
 
         static WorkData* loadFullData() {
@@ -169,6 +171,13 @@ class WorkData {
                 workData->numberList[i] = i;
             }
             return workData;
+        }
+
+        void freeData() {
+            if (this->numberList != NULL) {
+                delete this->numberList;
+                this->numberList = NULL;
+            }
         }
 
         void sendTo(int targetRank, int offset, int limit) {
@@ -255,13 +264,17 @@ class MasterProcess : public Process {
         }
 
         void run() {
-            this->logger->info("Processo mestre iniciado.");
+            this->logger->info("Processo mestre iniciado");
 
             WorkData* workData = WorkData::loadFullData();
 
             std::chrono::steady_clock::time_point startTime = this->now();
 
             this->dispatchPayload(workData);
+
+            if (EARLY_MEMORY_FREE != 0) {
+                workData->freeData();
+            }
 
             std::chrono::steady_clock::time_point dispatchTime = this->now();
 
@@ -277,13 +290,14 @@ class MasterProcess : public Process {
             int searchTimeMillis = this->elapsedMillis(dispatchTime, searchTime);
             int stopTimeMillis = this->elapsedMillis(searchTime, finalTime);
             int totalTimeMillis = this->elapsedMillis(startTime, finalTime);
-            this->logger->info("[[ Resultado da busca ]] => valorBuscado: %d, indiceResultado: %d, envioDados: %dms, busca: %dms, msgParada: %dms, total: %dms.",
+            this->logger->info("[[ Resultado da busca ]] => valorBuscado: %d, indiceResultado: %d, envioDados: %dms, busca: %dms, msgParada: %dms, total: %dms, memoriaLiberadaAntecipadamente: %d",
                     workData->getSearchTarget(),
                     foundIndex,
                     dispatchTimeMillis,
                     searchTimeMillis,
                     stopTimeMillis,
-                    totalTimeMillis);
+                    totalTimeMillis,
+                    EARLY_MEMORY_FREE);
 
             delete workData;
         }

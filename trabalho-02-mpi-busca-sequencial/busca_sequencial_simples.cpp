@@ -3,8 +3,8 @@
 #include <stdarg.h>
 #include <chrono>
 
-#define TEST_ARRAY_LENGTH 200000000
-#define TEST_TARGET_VALUE  99999999
+#define TEST_ARRAY_LENGTH 500000000
+#define TEST_TARGET_VALUE TEST_ARRAY_LENGTH - 1
 
 #define NOTHING_FOUND_INDEX -1
 
@@ -90,9 +90,12 @@ class MasterProcess : public Process {
         }
 
         void run() {
-            this->logger->info("Processo mestre iniciado.");
+            this->logger->info("Processo único iniciado.");
 
             WorkData* workData = WorkData::loadFullData();
+
+            this->logger->info("Buscando => valor: %d, totItems: %d",
+                    workData->getSearchTarget(), workData->getListSize());
 
             std::chrono::steady_clock::time_point startTime = this->now();
 

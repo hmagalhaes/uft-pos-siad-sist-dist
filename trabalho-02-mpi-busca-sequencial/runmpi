@@ -1,9 +1,8 @@
 #!/bin/bash
 
-PROGRAM=busca_sequencial_mpi
-SOURCE_EXT=cpp
-PROCESSOR_COUNT=4
-COMPILER=cpp
+PROGRAM=${PROGRAM:-busca_sequencial_mpi}
+PROCESSOR_COUNT=${PROCESSOR_COUNT:-2}
+COMPILER=${COMPILER:-cpp}
 
 clear
 rm ${PROGRAM}

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+PROGRAM=${PROGRAM:-busca_sequencial_simples}
+COMPILER=${COMPILER:-cpp}
+
+clear
+rm ${PROGRAM}
+
+echo "Compilando ${PROGRAM} em ${COMPILER}"
+
+case "${COMPILER}" in
+    c)
+        gcc ${PROGRAM}.c -o ${PROGRAM}
+    ;;
+    cpp)
+        g++ ${PROGRAM}.cpp -o ${PROGRAM}
+    ;;
+    *)
+        echo "Compilador inválido"
+        exit 1
+    ;;
+esac
+
+echo "Iniciando ${PROGRAM}"
+
+./${PROGRAM}
