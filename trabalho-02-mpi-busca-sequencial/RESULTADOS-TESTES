@@ -1,0 +1,163 @@
+I. Descrição
+
+Testes comparativos de performance do algoritmo de busca sequencial em vetor de inteiros usando (1) sistema tradicional em único processo em única máquina e (2) sistema distribuído através do Open MPI.
+
+Os testes buscam sempre o pior cenário da busca, o que foi feito buscando-se sempre o último elemento do vetor.
+
+II. Testes
+
+Os cenários de teste foram divididos por:
+- tamanho dos dados de entrada (payload);
+- processamento distribuído com 3, 4 e 5 processos;
+- processamento tradicional.
+
+No processamento distribuído dentre os processos iniciados há sempre 1 processo mestre e os outros são escravos. O processo mestre é responsável por carregar os dados de entrada e distribui-los entre os processos escravos. Já os escravos são responsáveis por realizar a busca em sua devida parte dos dados. Por fim o processo mestre reúne as respostas e envia sinal de parada aos processos escravos quando uma resposta é encontrada.
+
+Como os testes foram realizados usando somente uma máquina, nos cenários distribuídos há a opção de se liberar a memória alocada para os dados de entrada no processo mestre assim que os dados são enviados aos escravos. Isso, contudo, gera uma sobrecarga de processamento. Dessa foram foram feitos testes com e sem esta liberação de memória.
+
+1. Payload de 500.000.000 itens
+
+1.1. Execução distribuída MPI
+
+1.1.1. Execução com 3 processos (1 mestre e 2 escravos)
+
+1.1.1.1. Com liberação de memória
+
+Cenário (A):
+
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1252ms, busca: 508ms, msgParada: 0ms, total: 1761ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1083ms, busca: 544ms, msgParada: 0ms, total: 1627ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1084ms, busca: 739ms, msgParada: 0ms, total: 1823ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1142ms, busca: 818ms, msgParada: 0ms, total: 1961ms, memoriaLiberadaAntecipadamente: 1
+
+1.1.1.2. Sem liberação de memória
+
+Cenário (B):
+
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 962ms, busca: 840ms, msgParada: 0ms, total: 1802ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 978ms, busca: 840ms, msgParada: 0ms, total: 1819ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 952ms, busca: 674ms, msgParada: 0ms, total: 1626ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1115ms, busca: 842ms, msgParada: 0ms, total: 1957ms, memoriaLiberadaAntecipadamente: 0
+
+1.1.2. Com 4 processos (1 mestre e 3 escravos)
+
+1.1.2.1. Com liberação de memória
+
+Cenário (C):
+
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1219ms, busca: 493ms, msgParada: 0ms, total: 1712ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1220ms, busca: 463ms, msgParada: 0ms, total: 1684ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1232ms, busca: 533ms, msgParada: 0ms, total: 1766ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1255ms, busca: 472ms, msgParada: 0ms, total: 1727ms, memoriaLiberadaAntecipadamente: 1
+
+1.1.2.2. Sem liberação de memória
+
+Cenário (D):
+
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1168ms, busca: 571ms, msgParada: 0ms, total: 1740ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1158ms, busca: 590ms, msgParada: 0ms, total: 1749ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1225ms, busca: 561ms, msgParada: 0ms, total: 1786ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1109ms, busca: 610ms, msgParada: 0ms, total: 1720ms, memoriaLiberadaAntecipadamente: 0
+
+1.1.3. Com 5 processos (1 mestre e 4 escravos)
+
+1.1.3.1. Com liberação de memória
+
+Cenário (E):
+
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1785ms, busca: 438ms, msgParada: 0ms, total: 2224ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1674ms, busca: 650ms, msgParada: 0ms, total: 2324ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1637ms, busca: 405ms, msgParada: 0ms, total: 2042ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1806ms, busca: 406ms, msgParada: 0ms, total: 2213ms, memoriaLiberadaAntecipadamente: 1
+
+1.1.3.2. Sem liberação de memória
+
+Cenário (F):
+
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1471ms, busca: 676ms, msgParada: 0ms, total: 2148ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1402ms, busca: 465ms, msgParada: 0ms, total: 1867ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1399ms, busca: 754ms, msgParada: 0ms, total: 2153ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1415ms, busca: 469ms, msgParada: 0ms, total: 1885ms, memoriaLiberadaAntecipadamente: 0
+
+1.1. SIMPLES
+
+Cenário (G):
+
+    [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, busca: 1491ms
+    [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, busca: 1440ms
+    [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, busca: 1466ms
+    [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, busca: 1504ms
+
+2. Payload 800.000.000
+
+2.1. MPI
+
+2.1.1. Com 3 processos (2 slaves)
+
+2.1.1.1. Com liberação de memória
+
+Cenário (H):
+
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 18294ms, busca: 679ms, msgParada: 22ms, total: 18997ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2450ms, busca: 1073ms, msgParada: 0ms, total: 3524ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1827ms, busca: 993ms, msgParada: 0ms, total: 2821ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1835ms, busca: 966ms, msgParada: 0ms, total: 2802ms, memoriaLiberadaAntecipadamente: 1
+
+2.1.1.2. Sem liberação de memória
+
+Cenário (I):
+
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1480ms, busca: 1142ms, msgParada: 0ms, total: 2622ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1797ms, busca: 1437ms, msgParada: 0ms, total: 3235ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1535ms, busca: 1510ms, msgParada: 0ms, total: 3046ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1609ms, busca: 1351ms, msgParada: 0ms, total: 2960ms, memoriaLiberadaAntecipadamente: 0
+
+2.1.2. Com 4 processos (3 slaves)
+
+2.1.2.1. Com liberação de memória
+
+Cenário (J):
+
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2534ms, busca: 809ms, msgParada: 0ms, total: 3343ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2062ms, busca: 777ms, msgParada: 0ms, total: 2840ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2002ms, busca: 1014ms, msgParada: 0ms, total: 3016ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2292ms, busca: 802ms, msgParada: 0ms, total: 3095ms, memoriaLiberadaAntecipadamente: 1
+
+2.1.2.2. Sem liberação de memória
+
+Cenário (K):
+
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1922ms, busca: 1117ms, msgParada: 0ms, total: 3039ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1943ms, busca: 944ms, msgParada: 0ms, total: 2888ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1752ms, busca: 1045ms, msgParada: 0ms, total: 2798ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2137ms, busca: 1102ms, msgParada: 0ms, total: 3239ms, memoriaLiberadaAntecipadamente: 0
+
+
+2.1.3. Com 5 processos (4 slaves)
+
+2.1.3.1. Com liberação de memória
+
+Cenário (L):
+
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2947ms, busca: 742ms, msgParada: 0ms, total: 3689ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2696ms, busca: 744ms, msgParada: 0ms, total: 3441ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2992ms, busca: 597ms, msgParada: 2ms, total: 3591ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2510ms, busca: 763ms, msgParada: 0ms, total: 3274ms, memoriaLiberadaAntecipadamente: 1
+
+2.1.3.2. Sem liberação de memória
+
+Cenário (M):
+
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2754ms, busca: 881ms, msgParada: 0ms, total: 3636ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2189ms, busca: 950ms, msgParada: 0ms, total: 3140ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2774ms, busca: 849ms, msgParada: 0ms, total: 3624ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2247ms, busca: 865ms, msgParada: 0ms, total: 3112ms, memoriaLiberadaAntecipadamente: 0
+
+2.1. SIMPLES
+
+Cenário (N):
+
+    [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, busca: 2326ms
+    [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, busca: 2265ms
+    [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, busca: 2268ms
+    [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, busca: 2304ms
