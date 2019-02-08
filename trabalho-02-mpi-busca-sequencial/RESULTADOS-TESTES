@@ -15,6 +15,14 @@ No processamento distribuído dentre os processos iniciados há sempre 1 process
 
 Como os testes foram realizados usando somente uma máquina, nos cenários distribuídos há a opção de se liberar a memória alocada para os dados de entrada no processo mestre assim que os dados são enviados aos escravos. Isso, contudo, gera uma sobrecarga de processamento. Dessa foram foram feitos testes com e sem esta liberação de memória.
 
+Campos dos logs (tempos em milissegundos):
+- envioDados: Tempo para o envio dos dados particionados aos escravos.
+- busca: Tempo até o retorno do resultado da busca, ou seja, assim que o escravo de sucesso retorna o resultado.
+- msgParada: Tempo para o envio do sinal de parada para os escravos assim que alguém retorna o resultado.
+- total: Somatório dos tempos acima.
+
+Sobre o tempo de mensagem de parada. Nos testes apenas 2 casos houveram tempo relevante. Em um deles há um desvio total de tempo que provavelmente é resultado de oscilação da máquina, portanto deve ser descartado. O outro trata de um tempo bem reduzido, portanto este campo deve ser ignorado nos resultados finais do experimento.
+
 1. Payload de 500.000.000 itens
 
 1.1. Execução distribuída MPI
@@ -25,19 +33,19 @@ Como os testes foram realizados usando somente uma máquina, nos cenários distr
 
 Cenário (A):
 
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1252ms, busca: 508ms, msgParada: 0ms, total: 1761ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1083ms, busca: 544ms, msgParada: 0ms, total: 1627ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1084ms, busca: 739ms, msgParada: 0ms, total: 1823ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1142ms, busca: 818ms, msgParada: 0ms, total: 1961ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1252, busca: 508, msgParada: 0, total: 1761, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1083, busca: 544, msgParada: 0, total: 1627, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1084, busca: 739, msgParada: 0, total: 1823, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1142, busca: 818, msgParada: 0, total: 1961, memoriaLiberadaAntecipadamente: 1
 
 1.1.1.2. Sem liberação de memória
 
 Cenário (B):
 
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 962ms, busca: 840ms, msgParada: 0ms, total: 1802ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 978ms, busca: 840ms, msgParada: 0ms, total: 1819ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 952ms, busca: 674ms, msgParada: 0ms, total: 1626ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1115ms, busca: 842ms, msgParada: 0ms, total: 1957ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 962, busca: 840, msgParada: 0, total: 1802, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 978, busca: 840, msgParada: 0, total: 1819, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 952, busca: 674, msgParada: 0, total: 1626, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1115, busca: 842, msgParada: 0, total: 1957, memoriaLiberadaAntecipadamente: 0
 
 1.1.2. Com 4 processos (1 mestre e 3 escravos)
 
@@ -45,19 +53,19 @@ Cenário (B):
 
 Cenário (C):
 
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1219ms, busca: 493ms, msgParada: 0ms, total: 1712ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1220ms, busca: 463ms, msgParada: 0ms, total: 1684ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1232ms, busca: 533ms, msgParada: 0ms, total: 1766ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1255ms, busca: 472ms, msgParada: 0ms, total: 1727ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1219, busca: 493, msgParada: 0, total: 1712, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1220, busca: 463, msgParada: 0, total: 1684, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1232, busca: 533, msgParada: 0, total: 1766, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1255, busca: 472, msgParada: 0, total: 1727, memoriaLiberadaAntecipadamente: 1
 
 1.1.2.2. Sem liberação de memória
 
 Cenário (D):
 
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1168ms, busca: 571ms, msgParada: 0ms, total: 1740ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1158ms, busca: 590ms, msgParada: 0ms, total: 1749ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1225ms, busca: 561ms, msgParada: 0ms, total: 1786ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1109ms, busca: 610ms, msgParada: 0ms, total: 1720ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1168, busca: 571, msgParada: 0, total: 1740, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1158, busca: 590, msgParada: 0, total: 1749, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1225, busca: 561, msgParada: 0, total: 1786, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1109, busca: 610, msgParada: 0, total: 1720, memoriaLiberadaAntecipadamente: 0
 
 1.1.3. Com 5 processos (1 mestre e 4 escravos)
 
@@ -65,28 +73,28 @@ Cenário (D):
 
 Cenário (E):
 
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1785ms, busca: 438ms, msgParada: 0ms, total: 2224ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1674ms, busca: 650ms, msgParada: 0ms, total: 2324ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1637ms, busca: 405ms, msgParada: 0ms, total: 2042ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1806ms, busca: 406ms, msgParada: 0ms, total: 2213ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1785, busca: 438, msgParada: 0, total: 2224, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1674, busca: 650, msgParada: 0, total: 2324, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1637, busca: 405, msgParada: 0, total: 2042, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1806, busca: 406, msgParada: 0, total: 2213, memoriaLiberadaAntecipadamente: 1
 
 1.1.3.2. Sem liberação de memória
 
 Cenário (F):
 
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1471ms, busca: 676ms, msgParada: 0ms, total: 2148ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1402ms, busca: 465ms, msgParada: 0ms, total: 1867ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1399ms, busca: 754ms, msgParada: 0ms, total: 2153ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1415ms, busca: 469ms, msgParada: 0ms, total: 1885ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1471, busca: 676, msgParada: 0, total: 2148, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1402, busca: 465, msgParada: 0, total: 1867, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1399, busca: 754, msgParada: 0, total: 2153, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, envioDados: 1415, busca: 469, msgParada: 0, total: 1885, memoriaLiberadaAntecipadamente: 0
 
 1.1. SIMPLES
 
 Cenário (G):
 
-    [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, busca: 1491ms
-    [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, busca: 1440ms
-    [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, busca: 1466ms
-    [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, busca: 1504ms
+    [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, busca: 1491
+    [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, busca: 1440
+    [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, busca: 1466
+    [[ Resultado da busca ]] => valorBuscado: 499999999, indiceResultado: 499999999, busca: 1504
 
 2. Payload 800.000.000
 
@@ -98,19 +106,23 @@ Cenário (G):
 
 Cenário (H):
 
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 18294ms, busca: 679ms, msgParada: 22ms, total: 18997ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2450ms, busca: 1073ms, msgParada: 0ms, total: 3524ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1827ms, busca: 993ms, msgParada: 0ms, total: 2821ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1835ms, busca: 966ms, msgParada: 0ms, total: 2802ms, memoriaLiberadaAntecipadamente: 1
+    (DESCARTAR ESTE POR SER FORA DO PADRÃO)
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 18294, busca: 679, msgParada: 22, total: 18997, memoriaLiberadaAntecipadamente: 1
+
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2450, busca: 1073, msgParada: 0, total: 3524, memoriaLiberadaAntecipadamente: 1
+
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1827, busca: 993, msgParada: 0, total: 2821, memoriaLiberadaAntecipadamente: 1
+
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1835, busca: 966, msgParada: 0, total: 2802, memoriaLiberadaAntecipadamente: 1
 
 2.1.1.2. Sem liberação de memória
 
 Cenário (I):
 
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1480ms, busca: 1142ms, msgParada: 0ms, total: 2622ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1797ms, busca: 1437ms, msgParada: 0ms, total: 3235ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1535ms, busca: 1510ms, msgParada: 0ms, total: 3046ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1609ms, busca: 1351ms, msgParada: 0ms, total: 2960ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1480, busca: 1142, msgParada: 0, total: 2622, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1797, busca: 1437, msgParada: 0, total: 3235, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1535, busca: 1510, msgParada: 0, total: 3046, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/3] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1609, busca: 1351, msgParada: 0, total: 2960, memoriaLiberadaAntecipadamente: 0
 
 2.1.2. Com 4 processos (3 slaves)
 
@@ -118,19 +130,19 @@ Cenário (I):
 
 Cenário (J):
 
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2534ms, busca: 809ms, msgParada: 0ms, total: 3343ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2062ms, busca: 777ms, msgParada: 0ms, total: 2840ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2002ms, busca: 1014ms, msgParada: 0ms, total: 3016ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2292ms, busca: 802ms, msgParada: 0ms, total: 3095ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2534, busca: 809, msgParada: 0, total: 3343, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2062, busca: 777, msgParada: 0, total: 2840, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2002, busca: 1014, msgParada: 0, total: 3016, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2292, busca: 802, msgParada: 0, total: 3095, memoriaLiberadaAntecipadamente: 1
 
 2.1.2.2. Sem liberação de memória
 
 Cenário (K):
 
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1922ms, busca: 1117ms, msgParada: 0ms, total: 3039ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1943ms, busca: 944ms, msgParada: 0ms, total: 2888ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1752ms, busca: 1045ms, msgParada: 0ms, total: 2798ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2137ms, busca: 1102ms, msgParada: 0ms, total: 3239ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1922, busca: 1117, msgParada: 0, total: 3039, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1943, busca: 944, msgParada: 0, total: 2888, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 1752, busca: 1045, msgParada: 0, total: 2798, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/4] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2137, busca: 1102, msgParada: 0, total: 3239, memoriaLiberadaAntecipadamente: 0
 
 
 2.1.3. Com 5 processos (4 slaves)
@@ -139,25 +151,25 @@ Cenário (K):
 
 Cenário (L):
 
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2947ms, busca: 742ms, msgParada: 0ms, total: 3689ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2696ms, busca: 744ms, msgParada: 0ms, total: 3441ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2992ms, busca: 597ms, msgParada: 2ms, total: 3591ms, memoriaLiberadaAntecipadamente: 1
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2510ms, busca: 763ms, msgParada: 0ms, total: 3274ms, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2947, busca: 742, msgParada: 0, total: 3689, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2696, busca: 744, msgParada: 0, total: 3441, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2992, busca: 597, msgParada: 2, total: 3591, memoriaLiberadaAntecipadamente: 1
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2510, busca: 763, msgParada: 0, total: 3274, memoriaLiberadaAntecipadamente: 1
 
 2.1.3.2. Sem liberação de memória
 
 Cenário (M):
 
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2754ms, busca: 881ms, msgParada: 0ms, total: 3636ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2189ms, busca: 950ms, msgParada: 0ms, total: 3140ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2774ms, busca: 849ms, msgParada: 0ms, total: 3624ms, memoriaLiberadaAntecipadamente: 0
-    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2247ms, busca: 865ms, msgParada: 0ms, total: 3112ms, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2754, busca: 881, msgParada: 0, total: 3636, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2189, busca: 950, msgParada: 0, total: 3140, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2774, busca: 849, msgParada: 0, total: 3624, memoriaLiberadaAntecipadamente: 0
+    [hudson-pc] [rank: 0/5] [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, envioDados: 2247, busca: 865, msgParada: 0, total: 3112, memoriaLiberadaAntecipadamente: 0
 
 2.1. SIMPLES
 
 Cenário (N):
 
-    [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, busca: 2326ms
-    [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, busca: 2265ms
-    [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, busca: 2268ms
-    [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, busca: 2304ms
+    [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, busca: 2326
+    [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, busca: 2265
+    [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, busca: 2268
+    [[ Resultado da busca ]] => valorBuscado: 799999999, indiceResultado: 799999999, busca: 2304
